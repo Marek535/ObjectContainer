@@ -1,12 +1,29 @@
 package ObjectContainerProject;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ObjectContainer<TYPE> {
     private Node<TYPE> head = new Node<>(null);
     private int size;
-    private Predicate predicate;
+    private Predicate<TYPE> predicate;
+
+    public ObjectContainer(Predicate<TYPE> predicate) {
+        this.predicate = predicate;
+    }
+
+    @Override
+    public String toString() {
+        return "ObjectContainer{" +
+                "head=" + head +
+                ", size=" + size +
+                ", predicate=" + predicate +
+                '}';
+    }
 
     public ObjectContainer() {
         clear();
@@ -18,12 +35,14 @@ public class ObjectContainer<TYPE> {
     }
 
     public void add(TYPE value) {
-        if (head.getNext() == null) head.setNext(new Node(value));
-        Node last = head.getNext();
-        while (last.getNext() != null)
-            last = last.getNext();
-        ++size;
-        last.setNext(new Node(value));
+        if (predicate.test(value)) {
+            if (head.getNext() == null) head.setNext(new Node(value));
+            Node last = head.getNext();
+            while (last.getNext() != null)
+                last = last.getNext();
+            ++size;
+            last.setNext(new Node(value));
+        }
     }
 
     public boolean delete(TYPE o) {
@@ -45,13 +64,28 @@ public class ObjectContainer<TYPE> {
         return false;
     }
 
-    public void addFromCity(TYPE value) {
-        if (head.getNext() == null) head.setNext(new Node(value));
-        Node last = head.getNext();
-        while (last.getNext() != null)
+    public boolean removeIf(Predicate<TYPE> predicate) {
+        Node<TYPE> delete = head.getNext();
+        while (delete.getNext() != null) {
+            delete = delete.getNext();
+            if (predicate.test(delete.getValue())) {
+                delete.setNext(delete.getNext());
+                size--;
+            }
+        }
+        return false;
+    }
+
+    public List<TYPE> getWithFilter(Predicate<TYPE> predicate) {
+        List<TYPE> typeList = new ArrayList<>();
+        Node<TYPE> last = head.getNext();
+        while (last.getNext() != null) {
             last = last.getNext();
-        ++size;
-        last.setNext(new Node(value));
+            if (predicate.test(last.getValue())) {
+                typeList.add(last.getValue());
+            }
+        }
+        return typeList;
     }
 
 
