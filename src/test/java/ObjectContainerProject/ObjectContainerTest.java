@@ -2,6 +2,8 @@ package ObjectContainerProject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -87,13 +89,19 @@ class ObjectContainerTest {
         assertEquals(value0, objectContainer.getLastNode().getValue());
     }
 
-    @Test
-    void removeIf() {
-        String suffix = "_remove_it";
+    static final String REMOVE_IT_SUFFIX = "_remove_it";
+    @ParameterizedTest
+    @CsvSource({
+            CONDITION_PREFIX + 0 + REMOVE_IT_SUFFIX + ", " + CONDITION_PREFIX + 1 + ", " + CONDITION_PREFIX + 2,
+            CONDITION_PREFIX + 0 + ", " + CONDITION_PREFIX + 1 + REMOVE_IT_SUFFIX + ", " + CONDITION_PREFIX + 2,
+            CONDITION_PREFIX + 0 + ", " + CONDITION_PREFIX + 1 + ", " + CONDITION_PREFIX + 2 + REMOVE_IT_SUFFIX
+    })
+    void removeIf(String value0, String value1, String value2) {
+
         assertEquals(0, objectContainer.size);
-        String value0 = CONDITION_PREFIX + 0;
-        String value1 = CONDITION_PREFIX + 1 + suffix;
-        String value2 = CONDITION_PREFIX + 2;
+//        String value0 = CONDITION_PREFIX + 0;
+//        String value1 = CONDITION_PREFIX + 1 + REMOVE_IT_SUFFIX;
+//        String value2 = CONDITION_PREFIX + 2;
         objectContainer.add(value0);
         objectContainer.add(value1);
         objectContainer.add(value2);
@@ -102,7 +110,7 @@ class ObjectContainerTest {
         objectContainer.removeIf(new Predicate<String>() {
             @Override
             public boolean test(String s) {
-                return s != null && s.endsWith(suffix);
+                return s != null && s.endsWith(REMOVE_IT_SUFFIX);
             }
         });
         assertFalse(objectContainer.toList().contains(value1), "object " + value1 + " still there: " + objectContainer);
