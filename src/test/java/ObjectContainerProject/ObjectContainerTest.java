@@ -112,5 +112,21 @@ class ObjectContainerTest {
 
     @Test
     void getWithFilter() {
+        String suffix = "_find_it";
+        assertEquals(0, objectContainer.size);
+        String value0 = CONDITION_PREFIX + 0;
+        String value1 = CONDITION_PREFIX + 1 + suffix;
+        String value2 = CONDITION_PREFIX + 2;
+        objectContainer.add(value0);
+        objectContainer.add(value1);
+        objectContainer.add(value2);
+        List<String> found = objectContainer.getWithFilter(new Predicate<String>() {
+            @Override
+            public boolean test(String s) {
+                return s != null && s.endsWith(suffix);
+            }
+        });
+        assertEquals(1, found.size());
+        assertTrue(found.contains(value1));
     }
 }
