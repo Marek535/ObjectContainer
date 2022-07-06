@@ -37,15 +37,9 @@ public class ObjectContainer<TYPE> {
 
     public void add(TYPE value) {
         if (predicate.test(value)) {
-            if (head.getNext() == null) {
-                head.setNext(new Node(value));
-            }
-            Node last = head.getNext();
-            while (last.getNext() != null) {
-                last = last.getNext();
-            }
-            ++size;
+            Node<TYPE> last = getLastNode();
             last.setNext(new Node(value));
+            ++size;
         }
     }
 
