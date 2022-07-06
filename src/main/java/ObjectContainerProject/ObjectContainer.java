@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 public class ObjectContainer<TYPE> {
     private Node<TYPE> head = new Node<>(null);
-    private int size;
+    protected int size;
     private Predicate<TYPE> predicate;
 
     public ObjectContainer(Predicate<TYPE> predicate) {
@@ -96,5 +96,14 @@ public class ObjectContainer<TYPE> {
         }
         return typeList;
     }
+
+    protected Node<TYPE> getLastNode() {
+        Node last = head;
+        while (last.getNext() != null) {
+            last = last.getNext();
+        }
+        return last;
+    }
+
 }
 
