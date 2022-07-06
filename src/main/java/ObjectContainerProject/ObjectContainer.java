@@ -105,5 +105,14 @@ public class ObjectContainer<TYPE> {
         return last;
     }
 
+    protected List<TYPE> toList() {
+        List<TYPE> list = new ArrayList<>(size);
+        Node<TYPE> last = head;
+        do {
+            list.add(last.getValue());
+        } while ((last = last.getNext()) != null);
+        return list;
+    }
+    
 }
 
