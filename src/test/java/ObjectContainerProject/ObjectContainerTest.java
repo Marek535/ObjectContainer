@@ -89,6 +89,25 @@ class ObjectContainerTest {
 
     @Test
     void removeIf() {
+        String suffix = "_remove_it";
+        assertEquals(0, objectContainer.size);
+        String value0 = CONDITION_PREFIX + 0;
+        String value1 = CONDITION_PREFIX + 1 + suffix;
+        String value2 = CONDITION_PREFIX + 2;
+        objectContainer.add(value0);
+        objectContainer.add(value1);
+        objectContainer.add(value2);
+        assertEquals(3, objectContainer.size);
+        assertTrue(objectContainer.toList().contains(value1));
+        objectContainer.removeIf(new Predicate<String>() {
+            @Override
+            public boolean test(String s) {
+                return s != null && s.endsWith(suffix);
+            }
+        });
+        assertFalse(objectContainer.toList().contains(value1), "object " + value1 + " still there: " + objectContainer);
+        assertEquals(2, objectContainer.size, "size not reduced");
+
     }
 
     @Test
