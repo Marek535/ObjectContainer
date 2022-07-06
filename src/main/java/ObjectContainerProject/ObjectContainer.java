@@ -36,10 +36,13 @@ public class ObjectContainer<TYPE> {
 
     public void add(TYPE value) {
         if (predicate.test(value)) {
-            if (head.getNext() == null) head.setNext(new Node(value));
+            if (head.getNext() == null) {
+                head.setNext(new Node(value));
+            }
             Node last = head.getNext();
-            while (last.getNext() != null)
+            while (last.getNext() != null) {
                 last = last.getNext();
+            }
             ++size;
             last.setNext(new Node(value));
         }
@@ -65,16 +68,22 @@ public class ObjectContainer<TYPE> {
     }
 
     public boolean removeIf(Predicate<TYPE> predicate) {
-        Node<TYPE> delete = head.getNext();
+        if (predicate.test(head.getValue())) {
+            head = head.getNext();
+            size--;
+        }
+
+        Node<TYPE> delete = head;
         while (delete.getNext() != null) {
             delete = delete.getNext();
             if (predicate.test(delete.getValue())) {
-                delete.setNext(delete.getNext());
+                delete.setNext(delete.getNext().getNext());
                 size--;
             }
         }
         return false;
     }
+
 
     public List<TYPE> getWithFilter(Predicate<TYPE> predicate) {
         List<TYPE> typeList = new ArrayList<>();
@@ -87,6 +96,5 @@ public class ObjectContainer<TYPE> {
         }
         return typeList;
     }
-
-
 }
+

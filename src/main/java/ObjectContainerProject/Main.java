@@ -6,13 +6,14 @@ public class Main {
     public static void main(String[] args) {
 
         ObjectContainer<Person> peopleFromWarsaw = new ObjectContainer<>(p -> p.getCity().equals("Warsaw"));//tu w konstruktorze podajemy warunek do dodawania osoby do kontenera.
-        peopleFromWarsaw.add(new Person("Jan", "Warsaw", 60)); // powinno byc ok, Jan jest z warszawy
-        peopleFromWarsaw.add(new Person("Weronika","Warsaw", 51)); // powinno byc tez okej, Weronika jest z warszawy
-        peopleFromWarsaw.add(new Person("Waldek", "Monaco", 34));// no waldka niedoda, jest z Monaco, wiec tu powinno albo rzucic wyjatkiem, albo metoda add powinna zwrocic po prostu false - co wybierzesz to twoja decyzja.
-        peopleFromWarsaw.add(new Person("Waldeka", "Warsaw", 51));
-        peopleFromWarsaw.add(new Person("Waldeka", "Warsaw", 34));
-
+        peopleFromWarsaw.add(new Person("Jana", "Warsaw", 10)); // powinno byc ok, Jan jest z warszawy
+        peopleFromWarsaw.add(new Person("Weronik","Warsaw", 100)); // powinno byc tez okej, Weronika jest z warszawy
+//        peopleFromWarsaw.add(new Person("Waldek", "Monaco", 34));// no waldka niedoda, jest z Monaco, wiec tu powinno albo rzucic wyjatkiem, albo metoda add powinna zwrocic po prostu false - co wybierzesz to twoja decyzja.
+        peopleFromWarsaw.add(new Person("Waldek", "Warsaw", 500));
+        peopleFromWarsaw.add(new Person("Waldek", "Warsaw", 20));
+        peopleFromWarsaw.add(new Person("Waldek", "Warsaw", 34));
         System.out.println(peopleFromWarsaw);
+
 //do tego ponizej mozesz juz stosowac liste, no bo masz zwrocic liste:)
         List<Person> females = peopleFromWarsaw.getWithFilter(p -> p.getName().endsWith("a")); // zwraca nam wszystkie osoby spelniajace dany warunek.
 
