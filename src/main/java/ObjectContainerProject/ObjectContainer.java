@@ -22,6 +22,7 @@ public class ObjectContainer<TYPE> {
                 "head=" + head +
                 ", size=" + size +
                 ", predicate=" + predicate +
+                ", values=" + toList() +
                 '}';
     }
 
@@ -113,6 +114,6 @@ public class ObjectContainer<TYPE> {
         } while ((last = last.getNext()) != null);
         return list;
     }
-    
+
 }
 
