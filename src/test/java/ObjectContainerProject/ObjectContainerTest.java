@@ -101,7 +101,7 @@ class ObjectContainerTest {
         }
         assertEquals(valueCount, objectContainer.size);
         String toRemove = values.get(removeValueIdx);
-        objectContainer.delete(toRemove);
+        assertTrue(objectContainer.delete(toRemove));
         assertEquals(valueCount - 1, objectContainer.size, "wrong size " + objectContainer);
         List<String> list = objectContainer.toList();
         assertEquals(valueCount - 1, list.size() - 1, "wrong element count " + objectContainer);
