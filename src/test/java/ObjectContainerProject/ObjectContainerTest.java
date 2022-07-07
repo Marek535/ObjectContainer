@@ -111,6 +111,16 @@ class ObjectContainerTest {
         }
     }
 
+    /**
+     * Test if delete returns false if object wasn't deleted.
+     */
+    @Test
+    void deleteReturnValObjectNotPresent () {
+        assertEquals(0, objectContainer.size);
+        objectContainer.add("val1");
+        assertFalse(objectContainer.delete("val2"));
+    }
+
     @ParameterizedTest
     @CsvSource({
             CONDITION_PREFIX + 0 + REMOVE_IT_SUFFIX + ", " + CONDITION_PREFIX + 1 + ", " + CONDITION_PREFIX + 2,
