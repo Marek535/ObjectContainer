@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -82,19 +83,32 @@ class ObjectContainerTest {
         assertNull(objectContainer.getLastNode().getValue());
     }
 
-    @Test
-    void delete() {
+    @ParameterizedTest
+    @CsvSource({
+            "3, 0",
+            "3, 1",
+            "3, 2",
+            "1, 0",
+            "10, 5"
+    })
+    void delete(int valueCount, int removeValueIdx) {
         assertEquals(0, objectContainer.size);
-        String value0 = CONDITION_PREFIX + 0;
-        String value1 = CONDITION_PREFIX + 1;
-        objectContainer.add(value0);
-        objectContainer.add(value1);
-        assertEquals(2, objectContainer.size);
-        objectContainer.delete(value1);
-        assertEquals(1, objectContainer.size, "wrong size " + objectContainer);
+        List<String> values = new ArrayList<>();
+        for (int i = 0; i < valueCount ; i++) {
+            String v = CONDITION_PREFIX + i;
+            values.add(v);
+            objectContainer.add(v);
+        }
+        assertEquals(valueCount, objectContainer.size);
+        String toRemove = values.get(removeValueIdx);
+        objectContainer.delete(toRemove);
+        assertEquals(valueCount - 1, objectContainer.size, "wrong size " + objectContainer);
         List<String> list = objectContainer.toList();
-        assertEquals(1, list.size() - 1, "wrong element count " + objectContainer);
-        assertEquals(value0, objectContainer.getLastNode().getValue());
+        assertEquals(valueCount - 1, list.size() - 1, "wrong element count " + objectContainer);
+        if (removeValueIdx != valueCount - 1) {
+            // if we didn't remove the last value
+            assertEquals(values.get(valueCount - 1), objectContainer.getLastNode().getValue());
+        }
     }
 
     @ParameterizedTest
