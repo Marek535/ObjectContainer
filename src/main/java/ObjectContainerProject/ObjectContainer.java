@@ -44,22 +44,21 @@ public class ObjectContainer<TYPE> {
     }
 
     public boolean delete(TYPE o) {
-        if (head.getNext() == null) return false;
-        if (head.getNext().getValue().equals(o)) {
-            head.setNext(head.getNext().getNext());
-            size--;
-            return true;
+        if (o == null) {
+            //we use null value to mark head
+            throw new IllegalArgumentException("Can't delete null value.");
         }
-        Node delete = head.getNext();
-        while (delete != null && delete.getNext() != null) {
-            if (delete.getNext().getValue().equals(o)) {
-                delete.setNext(delete.getNext().getNext());
+        int oldSize = size;
+        Node<TYPE> previous = head;
+        Node<TYPE> current;
+        while ((current = previous.getNext()) != null) {
+            if (o.equals(current.getValue())) {
+                previous.setNext(current.getNext());
                 size--;
-                return true;
             }
-            delete = delete.getNext();
+            previous = current;
         }
-        return false;
+        return size == oldSize;
     }
 
     public boolean removeIf(Predicate<TYPE> predicate) {
