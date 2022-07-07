@@ -58,7 +58,7 @@ public class ObjectContainer<TYPE> {
             }
             previous = current;
         }
-        return size == oldSize;
+        return size != oldSize;
     }
 
     public boolean removeIf(Predicate<TYPE> predicate) {
