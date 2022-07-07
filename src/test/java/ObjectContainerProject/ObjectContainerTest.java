@@ -12,7 +12,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ObjectContainerTest {
 
+    /**
+     * String with this prefix will be added to the container.
+     * It's used in the predicate created in #setUp method.
+     */
     private static final String CONDITION_PREFIX = "add_it_";
+    /**
+     * String with this suffix will be removed by removeIf method.
+     * It's used in the predicate created in #removeIf test method.
+     */
+    static final String REMOVE_IT_SUFFIX = "_remove_it";
 
     private ObjectContainer<String> objectContainer;
 
@@ -25,7 +34,6 @@ class ObjectContainerTest {
             }
         });
     }
-
 
     @Test
     void addOne() {
@@ -41,8 +49,8 @@ class ObjectContainerTest {
         assertEquals(0, objectContainer.size);
         String value = CONDITION_PREFIX.replace(CONDITION_PREFIX.charAt(0), (char) (CONDITION_PREFIX.charAt(0) + 1));
         objectContainer.add(value);
-        assertEquals(0, objectContainer.size, "wrong size " + objectContainer.toString());
-        assertEquals(0, objectContainer.toList().size() - 1, "wrong element count " + objectContainer.toString());
+        assertEquals(0, objectContainer.size, "wrong size " + objectContainer);
+        assertEquals(0, objectContainer.toList().size() - 1, "wrong element count " + objectContainer);
     }
 
     @Test
@@ -56,7 +64,7 @@ class ObjectContainerTest {
         List<String> list = objectContainer.toList();
         assertTrue(list.contains(value0));
         assertTrue(list.contains(value1));
-        assertEquals(2, list.size() - 1, "wrong element count " + objectContainer.toString());
+        assertEquals(2, list.size() - 1, "wrong element count " + objectContainer);
         assertEquals(value1, objectContainer.getLastNode().getValue());
     }
 
@@ -83,13 +91,12 @@ class ObjectContainerTest {
         objectContainer.add(value1);
         assertEquals(2, objectContainer.size);
         objectContainer.delete(value1);
-        assertEquals(1, objectContainer.size, "wrong size " + objectContainer.toString());
+        assertEquals(1, objectContainer.size, "wrong size " + objectContainer);
         List<String> list = objectContainer.toList();
-        assertEquals(1, list.size() -1, "wrong element count " + objectContainer.toString());
+        assertEquals(1, list.size() - 1, "wrong element count " + objectContainer);
         assertEquals(value0, objectContainer.getLastNode().getValue());
     }
 
-    static final String REMOVE_IT_SUFFIX = "_remove_it";
     @ParameterizedTest
     @CsvSource({
             CONDITION_PREFIX + 0 + REMOVE_IT_SUFFIX + ", " + CONDITION_PREFIX + 1 + ", " + CONDITION_PREFIX + 2,
@@ -97,11 +104,7 @@ class ObjectContainerTest {
             CONDITION_PREFIX + 0 + ", " + CONDITION_PREFIX + 1 + ", " + CONDITION_PREFIX + 2 + REMOVE_IT_SUFFIX
     })
     void removeIf(String value0, String value1, String value2) {
-
         assertEquals(0, objectContainer.size);
-//        String value0 = CONDITION_PREFIX + 0;
-//        String value1 = CONDITION_PREFIX + 1 + REMOVE_IT_SUFFIX;
-//        String value2 = CONDITION_PREFIX + 2;
         objectContainer.add(value0);
         objectContainer.add(value1);
         objectContainer.add(value2);
@@ -115,7 +118,6 @@ class ObjectContainerTest {
         });
         assertFalse(objectContainer.toList().contains(value1), "object " + value1 + " still there: " + objectContainer);
         assertEquals(2, objectContainer.size, "size not reduced");
-
     }
 
     @Test
