@@ -36,6 +36,9 @@ public class ObjectContainer<TYPE> {
     }
 
     public void add(TYPE value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Can't add null value.");
+        }
         if (predicate.test(value)) {
             Node<TYPE> last = getLastNode();
             last.setNext(new Node(value));
