@@ -50,18 +50,12 @@ public class ObjectContainer<TYPE> {
             //we use null value to mark head
             throw new IllegalArgumentException("Can't delete null value.");
         }
-        int oldSize = size;
-        Node<TYPE> previous = head;
-        Node<TYPE> current;
-        while ((current = previous.getNext()) != null) {
-            if (o.equals(current.getValue())) {
-                previous.setNext(current.getNext());
-                size--;
-
+        return removeIf(new Predicate<TYPE>() {
+            @Override
+            public boolean test(TYPE v) {
+                return o.equals(v);
             }
-            previous = current;
-        }
-        return size != oldSize;
+        });
     }
 
 
