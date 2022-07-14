@@ -1,15 +1,14 @@
 package ObjectContainerProject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
+import org.jetbrains.annotations.NotNull;
 
-public class ObjectContainer<TYPE> {
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+public class ObjectContainer<TYPE> implements Iterable<TYPE> {
     private Node<TYPE> head = new Node<>(null);
     protected int size;
     private Predicate<TYPE> predicate;
@@ -60,31 +59,23 @@ public class ObjectContainer<TYPE> {
 
 
     public boolean removeIf(Predicate<TYPE> predicate) throws NullPointerException {
-        int oldSize = size;
-        Node<TYPE> previous = head;
-        Node<TYPE> current;
-        while (previous.getNext() != null) {
-            current = previous.getNext();
-            if (predicate.test(current.getValue())) {
-                previous.setNext(current.getNext());
-                size--;
+        Objects.requireNonNull(predicate);
+        boolean removed = false;
+        final Iterator<TYPE> each = iterator();
+        while (each.hasNext()) {
+            if (predicate.test(each.next())) {
+                each.remove();
+                removed = true;
             }
-            previous = current;
         }
-        return size != oldSize;
+        return removed;
     }
 
 
     public List<TYPE> getWithFilter(Predicate<TYPE> predicate) {
-        List<TYPE> typeList = new ArrayList<>();
-        Node<TYPE> last = head;
-        while (last.getNext() != null) {
-            last = last.getNext();
-            if (predicate.test(last.getValue())) {
-                typeList.add(last.getValue());
-            }
-        }
-        return typeList;
+        List<TYPE> list = StreamSupport.stream(this.spliterator(), false)
+                .filter(predicate).collect(Collectors.toList());
+        return list;
     }
 
 //    public void storeToFile(String path, Predicate<TYPE> predicate, Predicate<TYPE> secondPredicate) throws IOException {
@@ -112,11 +103,50 @@ public class ObjectContainer<TYPE> {
 
     protected List<TYPE> toList() {
         List<TYPE> list = new ArrayList<>(size);
-        Node<TYPE> last = head;
-        do {
-            list.add(last.getValue());
-        } while ((last = last.getNext()) != null);
+        for (TYPE v : this) {
+            list.add(v);
+        }
         return list;
+    }
+
+    @NotNull
+    @Override
+    public Iterator<TYPE> iterator() {
+        return new Iterator<TYPE>() {
+            Node<TYPE> next = head;
+            Node<TYPE> previous;
+
+            @Override
+            public boolean hasNext() {
+                return next.getNext() != null;
+            }
+
+            @Override
+            public TYPE next() {
+                previous = next;
+                next = next.getNext();
+                return next.getValue();
+            }
+
+            @Override
+            public void remove() {
+                if (previous.getNext() != next) {
+                    throw new IllegalStateException("remove already called after next");
+                }
+                previous.setNext(next.getNext());
+                size--;
+            }
+        };
+    }
+
+    @Override
+    public void forEach(Consumer<? super TYPE> action) {
+        Iterable.super.forEach(action);
+    }
+
+    @Override
+    public Spliterator<TYPE> spliterator() {
+        return Iterable.super.spliterator();
     }
 }
 
