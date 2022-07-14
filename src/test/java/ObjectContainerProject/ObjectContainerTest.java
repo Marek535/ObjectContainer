@@ -51,7 +51,7 @@ class ObjectContainerTest {
         String value = CONDITION_PREFIX.replace(CONDITION_PREFIX.charAt(0), (char) (CONDITION_PREFIX.charAt(0) + 1));
         objectContainer.add(value);
         assertEquals(0, objectContainer.size, "wrong size " + objectContainer);
-        assertEquals(0, objectContainer.toList().size() - 1, "wrong element count " + objectContainer);
+        assertEquals(0, objectContainer.toList().size(), "wrong element count " + objectContainer);
     }
 
     @Test
@@ -65,7 +65,7 @@ class ObjectContainerTest {
         List<String> list = objectContainer.toList();
         assertTrue(list.contains(value0));
         assertTrue(list.contains(value1));
-        assertEquals(2, list.size() - 1, "wrong element count " + objectContainer);
+        assertEquals(2, list.size(), "wrong element count " + objectContainer);
         assertEquals(value1, objectContainer.getLastNode().getValue());
     }
 
@@ -104,7 +104,7 @@ class ObjectContainerTest {
         assertTrue(objectContainer.delete(toRemove));
         assertEquals(valueCount - 1, objectContainer.size, "wrong size " + objectContainer);
         List<String> list = objectContainer.toList();
-        assertEquals(valueCount - 1, list.size() - 1, "wrong element count " + objectContainer);
+        assertEquals(valueCount - 1, list.size(), "wrong element count " + objectContainer);
         if (removeValueIdx != valueCount - 1) {
             // if we didn't remove the last value
             assertEquals(values.get(valueCount - 1), objectContainer.getLastNode().getValue());
