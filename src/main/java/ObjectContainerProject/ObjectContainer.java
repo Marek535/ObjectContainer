@@ -114,7 +114,7 @@ public class ObjectContainer<TYPE> implements Iterable<TYPE> {
     public Iterator<TYPE> iterator() {
         return new Iterator<TYPE>() {
             Node<TYPE> next = head;
-            Node<TYPE> previous;
+            Node<TYPE> previous = null;
 
             @Override
             public boolean hasNext() {
@@ -130,8 +130,8 @@ public class ObjectContainer<TYPE> implements Iterable<TYPE> {
 
             @Override
             public void remove() {
-                if (previous.getNext() != next) {
-                    throw new IllegalStateException("remove already called after next");
+                if (previous == null || previous.getNext() != next) {
+                    throw new IllegalStateException();
                 }
                 previous.setNext(next.getNext());
                 size--;
