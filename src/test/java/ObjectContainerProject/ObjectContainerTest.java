@@ -140,7 +140,10 @@ class ObjectContainerTest {
                 return s != null && s.endsWith(REMOVE_IT_SUFFIX);
             }
         });
-        assertFalse(objectContainer.toList().contains(value1), "object " + value1 + " still there: " + objectContainer);
+        List<String> values = objectContainer.toList();
+        for (int i = 1; i < values.size(); i++) {
+            assertFalse(values.get(i).endsWith(REMOVE_IT_SUFFIX));
+        }
         assertEquals(2, objectContainer.size, "size not reduced");
     }
 
