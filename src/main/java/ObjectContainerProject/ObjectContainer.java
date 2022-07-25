@@ -58,7 +58,7 @@ public class ObjectContainer<TYPE> implements Iterable<TYPE> {
     }
 
 
-    public boolean removeIf(Predicate<TYPE> predicate) throws NullPointerException {
+    public boolean removeIf(Predicate<TYPE> predicate) {
         Objects.requireNonNull(predicate);
         boolean removed = false;
         final Iterator<TYPE> each = iterator();
